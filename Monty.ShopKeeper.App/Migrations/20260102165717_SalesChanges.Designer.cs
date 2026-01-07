@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Monty.ShopKeeper.App.Data;
 
@@ -10,9 +11,11 @@ using Monty.ShopKeeper.App.Data;
 namespace Monty.ShopKeeper.App.Migrations
 {
     [DbContext(typeof(ShopKeeperDbContext))]
-    partial class ShopKeeperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260102165717_SalesChanges")]
+    partial class SalesChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.1");
@@ -50,42 +53,6 @@ namespace Monty.ShopKeeper.App.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationUsers");
-                });
-
-            modelBuilder.Entity("Monty.ShopKeeper.App.Entities.Basket", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("BalancePaid")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("TotalAmountPaid")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Baskets");
                 });
 
             modelBuilder.Entity("Monty.ShopKeeper.App.Entities.Product", b =>
@@ -182,8 +149,11 @@ namespace Monty.ShopKeeper.App.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BasketId")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("AmountPaid")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("BalancePaid")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -191,9 +161,6 @@ namespace Monty.ShopKeeper.App.Migrations
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<decimal>("CurrentPricePaid")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
@@ -212,8 +179,6 @@ namespace Monty.ShopKeeper.App.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BasketId");
 
                     b.HasIndex("ProductId");
 
@@ -282,9 +247,6 @@ namespace Monty.ShopKeeper.App.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Order")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -327,12 +289,6 @@ namespace Monty.ShopKeeper.App.Migrations
 
             modelBuilder.Entity("Monty.ShopKeeper.App.Entities.Sale", b =>
                 {
-                    b.HasOne("Monty.ShopKeeper.App.Entities.Basket", "Basket")
-                        .WithMany("LineItems")
-                        .HasForeignKey("BasketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Monty.ShopKeeper.App.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -342,8 +298,6 @@ namespace Monty.ShopKeeper.App.Migrations
                     b.HasOne("Monty.ShopKeeper.App.Entities.Product", null)
                         .WithMany("Sales")
                         .HasForeignKey("ProductId1");
-
-                    b.Navigation("Basket");
 
                     b.Navigation("Product");
                 });
@@ -361,11 +315,6 @@ namespace Monty.ShopKeeper.App.Migrations
                         .HasForeignKey("ProductId1");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Monty.ShopKeeper.App.Entities.Basket", b =>
-                {
-                    b.Navigation("LineItems");
                 });
 
             modelBuilder.Entity("Monty.ShopKeeper.App.Entities.Product", b =>

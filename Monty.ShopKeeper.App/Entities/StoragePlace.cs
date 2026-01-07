@@ -6,6 +6,7 @@ namespace Monty.ShopKeeper.App.Entities;
 public class StoragePlace : BaseEntity
 {
     public string Title { get; set; } = string.Empty;
+    public int Order { get; set; }
 }
 
 public class StoragePlaceConfiguration : IEntityTypeConfiguration<StoragePlace>

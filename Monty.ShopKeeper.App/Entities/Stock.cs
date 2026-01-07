@@ -8,6 +8,7 @@ public class Stock : BaseEntity
     public int ProductId { get; set; }
     public Product? Product { get; set; }
     public int Quantity { get; set; }
+    public int QuantityLeft { get; set; }
     public decimal UnitCostPrice { get; set; }
     public decimal UnitSellingPrice { get; set; }
 }
