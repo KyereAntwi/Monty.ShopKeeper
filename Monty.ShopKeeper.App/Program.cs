@@ -28,7 +28,8 @@ internal static class Program
             {
                 var dbPath = Path.Combine(AppContext.BaseDirectory, "shopkeeper.db");
                 string? connectionString = $"Data Source={dbPath}";
-                services.AddDbContext<IShopKeeperDbContext, ShopKeeperDbContext>(options => options.UseSqlite(connectionString));
+                services.AddDbContextPool<ShopKeeperDbContext>(options => options.UseSqlite(connectionString));
+                services.AddScoped<IShopKeeperDbContext>(sp => sp.GetRequiredService<ShopKeeperDbContext>());
 
                 services.AddScoped<IApplicationUserServices, ApplicationUserServices>();
                 services.AddScoped<IStockServices, StockServices>();
@@ -43,6 +44,9 @@ internal static class Program
                 services.AddTransient<CreateStorageFrm>();
                 services.AddTransient<SalesHistoryCtls>();
                 services.AddTransient<SalesCtls>();
+                services.AddTransient<RegisterFrm>();
+                services.AddTransient<SystemUsersListCtls>();
+                services.AddTransient<ImportProductsFrm>();
             })
             .Build();
 

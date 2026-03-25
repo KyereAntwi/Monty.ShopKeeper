@@ -47,6 +47,12 @@
             salesToolStripMenuItem = new ToolStripMenuItem();
             SaleMI = new ToolStripMenuItem();
             SalesHistoryMI = new ToolStripMenuItem();
+            importsAndExportsToolStripMenuItem = new ToolStripMenuItem();
+            imoprtProductsListToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem4 = new ToolStripSeparator();
+            exportAllProductsToolStripMenuItem = new ToolStripMenuItem();
+            exportAllSalesToolStripMenuItem = new ToolStripMenuItem();
+            exportYourOverviewSummaryToolStripMenuItem = new ToolStripMenuItem();
             MainPanel = new Panel();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -54,7 +60,7 @@
             // menuStrip1
             // 
             menuStrip1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, ProductsMI, storageStagesToolStripMenuItem, salesToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, ProductsMI, storageStagesToolStripMenuItem, salesToolStripMenuItem, importsAndExportsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1291, 29);
@@ -107,12 +113,14 @@
             registerSystemUserToolStripMenuItem.Name = "registerSystemUserToolStripMenuItem";
             registerSystemUserToolStripMenuItem.Size = new Size(235, 26);
             registerSystemUserToolStripMenuItem.Text = "Register System User";
+            registerSystemUserToolStripMenuItem.Click += registerSystemUserToolStripMenuItem_Click;
             // 
             // viewAllSystemUsersToolStripMenuItem
             // 
             viewAllSystemUsersToolStripMenuItem.Name = "viewAllSystemUsersToolStripMenuItem";
             viewAllSystemUsersToolStripMenuItem.Size = new Size(235, 26);
             viewAllSystemUsersToolStripMenuItem.Text = "View all system users";
+            viewAllSystemUsersToolStripMenuItem.Click += viewAllSystemUsersToolStripMenuItem_Click;
             // 
             // ProductsMI
             // 
@@ -191,6 +199,48 @@
             SalesHistoryMI.Text = "View sales history";
             SalesHistoryMI.Click += SalesHistoryMI_Click;
             // 
+            // importsAndExportsToolStripMenuItem
+            // 
+            importsAndExportsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { imoprtProductsListToolStripMenuItem, toolStripMenuItem4, exportAllProductsToolStripMenuItem, exportAllSalesToolStripMenuItem, exportYourOverviewSummaryToolStripMenuItem });
+            importsAndExportsToolStripMenuItem.Name = "importsAndExportsToolStripMenuItem";
+            importsAndExportsToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.I;
+            importsAndExportsToolStripMenuItem.Size = new Size(170, 25);
+            importsAndExportsToolStripMenuItem.Text = "Imports and Exports";
+            // 
+            // imoprtProductsListToolStripMenuItem
+            // 
+            imoprtProductsListToolStripMenuItem.Name = "imoprtProductsListToolStripMenuItem";
+            imoprtProductsListToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.I;
+            imoprtProductsListToolStripMenuItem.Size = new Size(310, 26);
+            imoprtProductsListToolStripMenuItem.Text = "Import products list";
+            imoprtProductsListToolStripMenuItem.Click += imoprtProductsListToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem4
+            // 
+            toolStripMenuItem4.Name = "toolStripMenuItem4";
+            toolStripMenuItem4.Size = new Size(307, 6);
+            // 
+            // exportAllProductsToolStripMenuItem
+            // 
+            exportAllProductsToolStripMenuItem.Name = "exportAllProductsToolStripMenuItem";
+            exportAllProductsToolStripMenuItem.Size = new Size(310, 26);
+            exportAllProductsToolStripMenuItem.Text = "Export all products";
+            exportAllProductsToolStripMenuItem.Click += exportAllProductsToolStripMenuItem_Click;
+            // 
+            // exportAllSalesToolStripMenuItem
+            // 
+            exportAllSalesToolStripMenuItem.Name = "exportAllSalesToolStripMenuItem";
+            exportAllSalesToolStripMenuItem.Size = new Size(310, 26);
+            exportAllSalesToolStripMenuItem.Text = "Export all sales";
+            exportAllSalesToolStripMenuItem.Click += exportAllSalesToolStripMenuItem_Click;
+            // 
+            // exportYourOverviewSummaryToolStripMenuItem
+            // 
+            exportYourOverviewSummaryToolStripMenuItem.Name = "exportYourOverviewSummaryToolStripMenuItem";
+            exportYourOverviewSummaryToolStripMenuItem.Size = new Size(310, 26);
+            exportYourOverviewSummaryToolStripMenuItem.Text = "Export your overview summary";
+            exportYourOverviewSummaryToolStripMenuItem.Click += exportYourOverviewSummaryToolStripMenuItem_Click;
+            // 
             // MainPanel
             // 
             MainPanel.Dock = DockStyle.Fill;
@@ -213,6 +263,8 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Shop Keeping SMS";
             WindowState = FormWindowState.Maximized;
+            FormClosing += MainFrm_FormClosing;
+            FormClosed += MainFrm_FormClosed;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -241,5 +293,11 @@
         private ToolStripMenuItem salesToolStripMenuItem;
         private ToolStripMenuItem SaleMI;
         private ToolStripMenuItem SalesHistoryMI;
+        private ToolStripMenuItem importsAndExportsToolStripMenuItem;
+        private ToolStripMenuItem imoprtProductsListToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem4;
+        private ToolStripMenuItem exportAllProductsToolStripMenuItem;
+        private ToolStripMenuItem exportAllSalesToolStripMenuItem;
+        private ToolStripMenuItem exportYourOverviewSummaryToolStripMenuItem;
     }
 }

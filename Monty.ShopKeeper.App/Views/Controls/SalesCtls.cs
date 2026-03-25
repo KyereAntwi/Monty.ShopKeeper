@@ -1,5 +1,6 @@
 ﻿using Monty.ShopKeeper.App.Entities;
 using Monty.ShopKeeper.App.Services;
+using Monty.ShopKeeper.App.Utils;
 
 namespace Monty.ShopKeeper.App.Views.Controls;
 
@@ -9,6 +10,7 @@ public partial class SalesCtls : UserControl
     private bool _basketCanBeProcessed = false;
     private Basket _basket = new();
     private IEnumerable<Basket> _basketHistory = [];
+    decimal _actualTotal = 0m;
 
     public SalesCtls(IStockServices stockServices)
     {
@@ -52,20 +54,24 @@ public partial class SalesCtls : UserControl
         _basket.LineItems.Add(new Sale
         {
             ProductId = product.Id,
-            Product = new Product { UniqueIdentifier = product.UniqueIdentifier, Name = product.Name},
+            Product = new Product { UniqueIdentifier = product.UniqueIdentifier, Name = product.Name },
             Quantity = (int)QuantityTxt.Value,
             CurrentPricePaid = product.CurrentSellingPrice
         });
 
         BasketLb.Items.Add($"Product: {product.UniqueIdentifier} - {product.Name}, Quantity: {QuantityTxt.Value}");
-        decimal toatlBasket = (Convert.ToDecimal(BasketTotalLb.Text) + (product.CurrentSellingPrice * (int)QuantityTxt.Value));
-        BasketTotalLb.Text = toatlBasket.ToString("C2");
+        _actualTotal = (_actualTotal + (product.CurrentSellingPrice * (int)QuantityTxt.Value));
+        BasketTotalLb.Text = _actualTotal.ToString("C2");
         SendBtn.Enabled = true;
+
+        CodeTxt.Clear();
+        QuantityTxt.Value = 0;
+        AddBtn.Enabled = false;
     }
 
     private void LoadBasketHistory()
     {
-        var result = _stockServices.GetAllSalesAsync(string.Empty, DateTime.Now, DateTime.Now, 1, 100).GetAwaiter().GetResult();
+        var result = _stockServices.GetAllSalesAsync(string.Empty, DateTime.Now, DateTime.Now, 1, 100, null, false, null).GetAwaiter().GetResult();
         _basketHistory = result.Value;
 
         if (!_basketHistory.Any())
@@ -76,9 +82,9 @@ public partial class SalesCtls : UserControl
         foreach (var item in _basketHistory)
         {
             var listViewItem = new ListViewItem(item.Id.ToString());
-            listViewItem.Tag = item;
             listViewItem.SubItems.Add(item.CreatedAt.ToLongTimeString());
             listViewItem.SubItems.Add(item.LineItems.Sum(i => i.Quantity * i.CurrentPricePaid).ToString("C2"));
+
             listViewItem.SubItems.Add(item.TotalAmountPaid.ToString("C2"));
             listViewItem.SubItems.Add(item.BalancePaid.ToString("C2"));
             listViewItem.SubItems.Add(item.Comments);
@@ -94,8 +100,11 @@ public partial class SalesCtls : UserControl
         var finalFrm = new MakeSaleFrm(_basket, _stockServices);
         finalFrm.ShowDialog();
 
+        _basket = new Basket();
         ClearForm();
+
         LoadBasketHistory();
+        _actualTotal = 0m;
     }
 
     private void ReloadBtn_Click(object sender, EventArgs e)
@@ -106,7 +115,7 @@ public partial class SalesCtls : UserControl
 
     private void ClearBtn_Click(object sender, EventArgs e)
     {
-       ClearForm();
+        ClearForm();
     }
 
     private void ClearForm()
@@ -117,5 +126,48 @@ public partial class SalesCtls : UserControl
         AddBtn.Enabled = false;
         BasketLb.Items.Clear();
         BasketTotalLb.Text = "0";
+    }
+
+    private void viewDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (BasketHistoryLv.SelectedItems.Count == 0)
+        {
+            MessageBox.Show("No item is selected. Make the right click on the Id number of the item to ensure item is selected.", "Warnning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var listItem = BasketHistoryLv.SelectedItems[0];
+        var selectedSale = _basketHistory.FirstOrDefault(item => item.Id.ToString() == listItem.Text);
+
+        if (selectedSale == null) return;
+
+        var form = new MakeSaleFrm(selectedSale, _stockServices);
+        form.ShowDialog();
+    }
+
+    private void printReceiptToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (BasketHistoryLv.SelectedItems.Count == 0)
+        {
+            MessageBox.Show("No item is selected. Make the right click on the Id number of the item to ensure item is selected.", "Warnning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var dialogResult = MessageBox.Show("This will print the receipt for the selected sale. Do you want to continue?", "Print Receipt", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+        if (dialogResult == DialogResult.No)
+            return;
+
+        var listItem = BasketHistoryLv.SelectedItems[0];
+        var selectedSale = _basketHistory.FirstOrDefault(item => item.Id.ToString() == listItem.Text);
+
+        if (selectedSale == null) return;
+
+        Print.PrintReceipt(selectedSale);
+    }
+
+    private void makeAReturnOnThisSaleToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+
     }
 }

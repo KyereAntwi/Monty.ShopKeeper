@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Monty.ShopKeeper.App.Data;
 
@@ -10,9 +11,11 @@ using Monty.ShopKeeper.App.Data;
 namespace Monty.ShopKeeper.App.Migrations
 {
     [DbContext(typeof(ShopKeeperDbContext))]
-    partial class ShopKeeperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260226111538_NullableEntities")]
+    partial class NullableEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.1");
@@ -34,11 +37,6 @@ namespace Monty.ShopKeeper.App.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Role")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(3);
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -70,16 +68,6 @@ namespace Monty.ShopKeeper.App.Migrations
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("PurchaseType")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(2);
-
-                    b.Property<bool>("Returned")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(false);
 
                     b.Property<decimal>("TotalAmountPaid")
                         .HasColumnType("decimal(18,2)");

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Monty.ShopKeeper.App.Data;
 
@@ -10,9 +11,11 @@ using Monty.ShopKeeper.App.Data;
 namespace Monty.ShopKeeper.App.Migrations
 {
     [DbContext(typeof(ShopKeeperDbContext))]
-    partial class ShopKeeperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260321153754_AddedSaleTypeAndReturned")]
+    partial class AddedSaleTypeAndReturned
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.1");
@@ -34,11 +37,6 @@ namespace Monty.ShopKeeper.App.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Role")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(3);
 
                     b.Property<string>("UserName")
                         .IsRequired()

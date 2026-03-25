@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panel1 = new Panel();
             SendBtn = new Button();
             ReloadBtn = new Button();
@@ -50,19 +51,25 @@
             IdCl = new ColumnHeader();
             CreatedAtCl = new ColumnHeader();
             TotalCl = new ColumnHeader();
+            AmountReceivedCl = new ColumnHeader();
+            BalancePaidCl = new ColumnHeader();
             DescriptionCl = new ColumnHeader();
+            SalesItemMenus = new ContextMenuStrip(components);
+            viewDetailsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripSeparator();
+            printReceiptToolStripMenuItem = new ToolStripMenuItem();
+            makeAReturnOnThisSaleToolStripMenuItem = new ToolStripMenuItem();
             panel5 = new Panel();
             TotalLb = new Label();
             label3 = new Label();
             label5 = new Label();
-            BalancePaidCl = new ColumnHeader();
-            AmountReceivedCl = new ColumnHeader();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)QuantityTxt).BeginInit();
             panel4.SuspendLayout();
             panel3.SuspendLayout();
+            SalesItemMenus.SuspendLayout();
             panel5.SuspendLayout();
             SuspendLayout();
             // 
@@ -271,6 +278,8 @@
             // 
             BasketHistoryLv.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             BasketHistoryLv.Columns.AddRange(new ColumnHeader[] { IdCl, CreatedAtCl, TotalCl, AmountReceivedCl, BalancePaidCl, DescriptionCl });
+            BasketHistoryLv.ContextMenuStrip = SalesItemMenus;
+            BasketHistoryLv.FullRowSelect = true;
             BasketHistoryLv.GridLines = true;
             BasketHistoryLv.Location = new Point(3, 68);
             BasketHistoryLv.Name = "BasketHistoryLv";
@@ -293,11 +302,54 @@
             TotalCl.Text = "Total Amount";
             TotalCl.Width = 200;
             // 
+            // AmountReceivedCl
+            // 
+            AmountReceivedCl.DisplayIndex = 5;
+            AmountReceivedCl.Text = "Amount Received";
+            AmountReceivedCl.Width = 100;
+            // 
+            // BalancePaidCl
+            // 
+            BalancePaidCl.Text = "Balance Paid";
+            BalancePaidCl.Width = 100;
+            // 
             // DescriptionCl
             // 
             DescriptionCl.DisplayIndex = 3;
             DescriptionCl.Text = "Comments";
             DescriptionCl.Width = 200;
+            // 
+            // SalesItemMenus
+            // 
+            SalesItemMenus.Items.AddRange(new ToolStripItem[] { viewDetailsToolStripMenuItem, toolStripMenuItem1, printReceiptToolStripMenuItem, makeAReturnOnThisSaleToolStripMenuItem });
+            SalesItemMenus.Name = "SalesItemMenus";
+            SalesItemMenus.Size = new Size(210, 76);
+            // 
+            // viewDetailsToolStripMenuItem
+            // 
+            viewDetailsToolStripMenuItem.Name = "viewDetailsToolStripMenuItem";
+            viewDetailsToolStripMenuItem.Size = new Size(209, 22);
+            viewDetailsToolStripMenuItem.Text = "View Details";
+            viewDetailsToolStripMenuItem.Click += viewDetailsToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(206, 6);
+            // 
+            // printReceiptToolStripMenuItem
+            // 
+            printReceiptToolStripMenuItem.Name = "printReceiptToolStripMenuItem";
+            printReceiptToolStripMenuItem.Size = new Size(209, 22);
+            printReceiptToolStripMenuItem.Text = "Print Receipt";
+            printReceiptToolStripMenuItem.Click += printReceiptToolStripMenuItem_Click;
+            // 
+            // makeAReturnOnThisSaleToolStripMenuItem
+            // 
+            makeAReturnOnThisSaleToolStripMenuItem.Name = "makeAReturnOnThisSaleToolStripMenuItem";
+            makeAReturnOnThisSaleToolStripMenuItem.Size = new Size(209, 22);
+            makeAReturnOnThisSaleToolStripMenuItem.Text = "Make a return on this sale";
+            makeAReturnOnThisSaleToolStripMenuItem.Click += makeAReturnOnThisSaleToolStripMenuItem_Click;
             // 
             // panel5
             // 
@@ -342,17 +394,6 @@
             label5.TabIndex = 3;
             label5.Text = "Total amount sales for the day";
             // 
-            // BalancePaidCl
-            // 
-            BalancePaidCl.Text = "Balance Paid";
-            BalancePaidCl.Width = 100;
-            // 
-            // AmountReceivedCl
-            // 
-            AmountReceivedCl.DisplayIndex = 5;
-            AmountReceivedCl.Text = "Amount Received";
-            AmountReceivedCl.Width = 100;
-            // 
             // SalesCtls
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
@@ -373,6 +414,7 @@
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
             panel3.ResumeLayout(false);
+            SalesItemMenus.ResumeLayout(false);
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
             ResumeLayout(false);
@@ -409,5 +451,10 @@
         private Button ClearBtn;
         private ColumnHeader AmountReceivedCl;
         private ColumnHeader BalancePaidCl;
+        private ContextMenuStrip SalesItemMenus;
+        private ToolStripMenuItem viewDetailsToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem printReceiptToolStripMenuItem;
+        private ToolStripMenuItem makeAReturnOnThisSaleToolStripMenuItem;
     }
 }

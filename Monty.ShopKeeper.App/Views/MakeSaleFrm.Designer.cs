@@ -38,6 +38,7 @@
             CommentTxt = new RichTextBox();
             label4 = new Label();
             SubmitBtn = new Button();
+            CreditPurchaseCB = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)AmountReceivedTxt).BeginInit();
             SuspendLayout();
             // 
@@ -75,7 +76,7 @@
             AmountReceivedTxt.Location = new Point(18, 353);
             AmountReceivedTxt.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
             AmountReceivedTxt.Name = "AmountReceivedTxt";
-            AmountReceivedTxt.Size = new Size(492, 29);
+            AmountReceivedTxt.Size = new Size(222, 29);
             AmountReceivedTxt.TabIndex = 3;
             AmountReceivedTxt.ValueChanged += AmountReceivedTxt_ValueChanged;
             // 
@@ -117,6 +118,7 @@
             CommentTxt.Size = new Size(495, 96);
             CommentTxt.TabIndex = 7;
             CommentTxt.Text = "";
+            CommentTxt.TextChanged += CommentTxt_TextChanged;
             // 
             // label4
             // 
@@ -140,11 +142,26 @@
             SubmitBtn.UseVisualStyleBackColor = true;
             SubmitBtn.Click += SubmitBtn_Click;
             // 
+            // CreditPurchaseCB
+            // 
+            CreditPurchaseCB.Anchor = AnchorStyles.Right;
+            CreditPurchaseCB.AutoSize = true;
+            CreditPurchaseCB.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            CreditPurchaseCB.ForeColor = Color.FromArgb(192, 64, 0);
+            CreditPurchaseCB.Location = new Point(306, 356);
+            CreditPurchaseCB.Name = "CreditPurchaseCB";
+            CreditPurchaseCB.Size = new Size(201, 26);
+            CreditPurchaseCB.TabIndex = 10;
+            CreditPurchaseCB.Text = "Purchase on credit";
+            CreditPurchaseCB.UseVisualStyleBackColor = true;
+            CreditPurchaseCB.CheckedChanged += CreditPurchaseCB_CheckedChanged;
+            // 
             // MakeSaleFrm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(519, 646);
+            Controls.Add(CreditPurchaseCB);
             Controls.Add(SubmitBtn);
             Controls.Add(label4);
             Controls.Add(CommentTxt);
@@ -182,5 +199,6 @@
         private RichTextBox CommentTxt;
         private Label label4;
         private Button SubmitBtn;
+        private CheckBox CreditPurchaseCB;
     }
 }

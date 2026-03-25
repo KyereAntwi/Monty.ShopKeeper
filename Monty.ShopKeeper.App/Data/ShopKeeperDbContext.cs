@@ -19,10 +19,6 @@ public class ShopKeeperDbContext : DbContext, IShopKeeperDbContext
             {
                 case EntityState.Added:
                     entity.Entity.CreatedAt = DateTime.UtcNow;
-                    entity.Entity.UpdatedAt = DateTime.UtcNow;
-                    break;
-                case EntityState.Modified:
-                    entity.Entity.UpdatedAt = DateTime.UtcNow;
                     break;
             }
         }
