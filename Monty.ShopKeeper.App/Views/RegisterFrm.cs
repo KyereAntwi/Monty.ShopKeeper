@@ -1,4 +1,5 @@
-﻿using Monty.ShopKeeper.App.Services;
+﻿using Monty.ShopKeeper.App.Entities.Enums;
+using Monty.ShopKeeper.App.Services;
 
 namespace Monty.ShopKeeper.App.Views;
 
@@ -32,7 +33,9 @@ public partial class RegisterFrm : Form
         if (string.IsNullOrEmpty(UsernameTxt.Text) ||
             string.IsNullOrEmpty(PasswordTxt.Text) ||
             PasswordTxt.Text.Trim().Length < 6 ||
-            string.IsNullOrEmpty(ConfirmPassTxt.Text))
+            string.IsNullOrEmpty(ConfirmPassTxt.Text) ||
+            string.IsNullOrEmpty(RolesCB.Text.Trim()) ||
+            RolesCB.Text.Contains("select", StringComparison.CurrentCultureIgnoreCase))
         {
             RegisterBtn.Enabled = false;
         }
@@ -50,7 +53,14 @@ public partial class RegisterFrm : Form
             return;
         }
 
-        var result = _services.AddUserAccountAsync(UsernameTxt.Text.Trim(), PasswordTxt.Text.Trim()).GetAwaiter().GetResult();
+        RoleType role = RoleType.None;
+
+        if (RolesCB.Text.Trim().Contains("Admin", StringComparison.CurrentCultureIgnoreCase))
+            role = RoleType.Administrator;
+        else if (RolesCB.Text.Trim().Contains("Sale", StringComparison.CurrentCultureIgnoreCase))
+            role = RoleType.SalesPerson;
+
+        var result = _services.AddUserAccountAsync(UsernameTxt.Text.Trim(), PasswordTxt.Text.Trim(), role).GetAwaiter().GetResult();
 
         if (result.IsFailed)
         {

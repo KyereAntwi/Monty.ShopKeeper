@@ -36,6 +36,8 @@
             ConfirmPassTxt = new TextBox();
             label2 = new Label();
             RegisterBtn = new Button();
+            RolesCB = new ComboBox();
+            label3 = new Label();
             SuspendLayout();
             // 
             // TitleLb
@@ -52,7 +54,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(13, 149);
+            label1.Location = new Point(13, 121);
             label1.Name = "label1";
             label1.Size = new Size(87, 21);
             label1.TabIndex = 1;
@@ -60,7 +62,7 @@
             // 
             // UsernameTxt
             // 
-            UsernameTxt.Location = new Point(13, 173);
+            UsernameTxt.Location = new Point(13, 145);
             UsernameTxt.MaxLength = 225;
             UsernameTxt.Name = "UsernameTxt";
             UsernameTxt.PlaceholderText = "Username here ...";
@@ -70,7 +72,7 @@
             // 
             // PasswordTxt
             // 
-            PasswordTxt.Location = new Point(13, 258);
+            PasswordTxt.Location = new Point(13, 297);
             PasswordTxt.MaxLength = 16;
             PasswordTxt.Name = "PasswordTxt";
             PasswordTxt.PasswordChar = 'X';
@@ -82,7 +84,7 @@
             // PasswordLb
             // 
             PasswordLb.AutoSize = true;
-            PasswordLb.Location = new Point(13, 234);
+            PasswordLb.Location = new Point(13, 273);
             PasswordLb.Name = "PasswordLb";
             PasswordLb.Size = new Size(83, 21);
             PasswordLb.TabIndex = 3;
@@ -90,7 +92,7 @@
             // 
             // ConfirmPassTxt
             // 
-            ConfirmPassTxt.Location = new Point(13, 356);
+            ConfirmPassTxt.Location = new Point(13, 395);
             ConfirmPassTxt.MaxLength = 16;
             ConfirmPassTxt.Name = "ConfirmPassTxt";
             ConfirmPassTxt.PasswordChar = 'X';
@@ -102,7 +104,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(13, 332);
+            label2.Location = new Point(13, 371);
             label2.Name = "label2";
             label2.Size = new Size(146, 21);
             label2.TabIndex = 5;
@@ -112,7 +114,7 @@
             // 
             RegisterBtn.Enabled = false;
             RegisterBtn.FlatStyle = FlatStyle.Flat;
-            RegisterBtn.Location = new Point(227, 428);
+            RegisterBtn.Location = new Point(227, 467);
             RegisterBtn.Name = "RegisterBtn";
             RegisterBtn.Size = new Size(291, 38);
             RegisterBtn.TabIndex = 7;
@@ -120,11 +122,34 @@
             RegisterBtn.UseVisualStyleBackColor = true;
             RegisterBtn.Click += RegisterBtn_Click;
             // 
+            // RolesCB
+            // 
+            RolesCB.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            RolesCB.FlatStyle = FlatStyle.Flat;
+            RolesCB.FormattingEnabled = true;
+            RolesCB.Items.AddRange(new object[] { "Select role", "Administrator", "Sales Person" });
+            RolesCB.Location = new Point(13, 221);
+            RolesCB.Name = "RolesCB";
+            RolesCB.Size = new Size(505, 29);
+            RolesCB.TabIndex = 8;
+            RolesCB.Text = "Select role";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(13, 197);
+            label3.Name = "label3";
+            label3.Size = new Size(47, 21);
+            label3.TabIndex = 9;
+            label3.Text = "Role:";
+            // 
             // RegisterFrm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(530, 633);
+            Controls.Add(label3);
+            Controls.Add(RolesCB);
             Controls.Add(RegisterBtn);
             Controls.Add(ConfirmPassTxt);
             Controls.Add(label2);
@@ -157,5 +182,7 @@
         private TextBox ConfirmPassTxt;
         private Label label2;
         private Button RegisterBtn;
+        private ComboBox RolesCB;
+        private Label label3;
     }
 }

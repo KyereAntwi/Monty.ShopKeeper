@@ -302,6 +302,13 @@ public class StockServices(IShopKeeperDbContext dbContext) : IStockServices
             item.Product = null;
         }
 
+        var loggedInUserUsername = await dbContext
+            .LoggedInUser
+            .Select(l => l.ApplicationUser!.UserName)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        basket.CreatedBy = loggedInUserUsername ?? "System";
+
         await dbContext.Baskets.AddAsync(basket, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
         return Result.Ok();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Monty.ShopKeeper.App.Entities.Enums;
 using Monty.ShopKeeper.App.Services;
 using Monty.ShopKeeper.App.Views.Controls;
 
@@ -7,17 +8,19 @@ namespace Monty.ShopKeeper.App.Views;
 public partial class MainFrm : Form
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly IApplicationUserServices _applicationUserServices;
     private LoginFrm? _loginForm;
     private bool _suppressCloseConfirmation = false;
-    
+
     private TabControl? _salesTabControl;
     private int _salesTabCounter = 0;
     private bool _isSalesTabInitialized = false;
 
-    public MainFrm(IServiceProvider serviceProvider)
+    public MainFrm(IServiceProvider serviceProvider, IApplicationUserServices applicationUserServices)
     {
         InitializeComponent();
         _serviceProvider = serviceProvider;
+        _applicationUserServices = applicationUserServices;
 
         LoadWelcomeScreen();
     }
@@ -27,15 +30,23 @@ public partial class MainFrm : Form
         ShutApp();
     }
 
-    private static void ShutApp()
+    private void ShutApp()
     {
+        var result = _applicationUserServices.LogoutAsync().GetAwaiter().GetResult();
+
+        if (result.IsFailed)
+        {
+            MessageBox.Show("Failed to log you out of this window. Try again!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
         var dialogResult = MessageBox.Show("Are you sure you want to exit the application?", "Exit Application", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         if (dialogResult == DialogResult.Yes)
             Application.Exit();
     }
 
-    private void EnsureSalesTabControl() 
+    private void EnsureSalesTabControl()
     {
         if (_salesTabControl != null)
             return;
@@ -143,20 +154,31 @@ public partial class MainFrm : Form
         var dialogResult = MessageBox.Show("Are you sure you want to log out of this account?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         if (dialogResult != DialogResult.Yes)
             return;
+        LogOut();
+    }
 
+    private void LogOut()
+    {
         try
         {
+            var result = _applicationUserServices.LogoutAsync().GetAwaiter().GetResult();
+
+            if (result.IsFailed)
+            {
+                MessageBox.Show("Failed to log you out of this window. Try again!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             _loginForm = _serviceProvider?.GetRequiredService<LoginFrm>();
 
             if (_loginForm == null)
             {
                 MessageBox.Show("Unable to resolve the login form.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
 
-            _loginForm.FormClosed -= LoginForm_FormClosed;
-            _loginForm.FormClosed += LoginForm_FormClosed;
-            _loginForm.Show();
+            _loginForm?.FormClosed -= LoginForm_FormClosed;
+            _loginForm?.FormClosed += LoginForm_FormClosed;
+            _loginForm?.Show();
 
             _suppressCloseConfirmation = true;
             this.Hide();
@@ -319,5 +341,24 @@ public partial class MainFrm : Form
         var stockServices = _serviceProvider.GetRequiredService<IStockServices>();
         LoaderFrm loaderFrm = new("Processing overview summary to be exported ...", Utils.ExportType.ExportOverviewSummary, stockServices);
         loaderFrm.ShowDialog();
+    }
+
+    private void MainFrm_Load(object sender, EventArgs e)
+    {
+        var loggedInUser = _applicationUserServices.GetLoggedInUserAsync().GetAwaiter().GetResult().Value;
+
+        if (loggedInUser == null)
+        {
+            LogOut();
+            return;
+        }
+
+        if (loggedInUser.ApplicationUser?.Role != RoleType.Administrator)
+        {
+            systemAdministrationToolStripMenuItem.Enabled = false;
+            AddProductMI.Enabled = false;
+            storageStagesToolStripMenuItem.Enabled = false;
+            importsAndExportsToolStripMenuItem.Enabled = false;
+        }
     }
 }

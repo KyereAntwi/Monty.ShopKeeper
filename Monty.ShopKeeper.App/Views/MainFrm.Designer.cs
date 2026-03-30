@@ -265,6 +265,7 @@
             WindowState = FormWindowState.Maximized;
             FormClosing += MainFrm_FormClosing;
             FormClosed += MainFrm_FormClosed;
+            Load += MainFrm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);

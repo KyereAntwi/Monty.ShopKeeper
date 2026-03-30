@@ -11,43 +11,66 @@ namespace Monty.ShopKeeper.App;
 
 internal static class Program
 {
+
     [STAThread]
     static void Main()
     {
         ApplicationConfiguration.Initialize();
 
-        // DI registration
-        using IHost host = Host.CreateDefaultBuilder()
-            .ConfigureAppConfiguration((context, config) => 
-            {
-                config
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
-            })
+        using IHost host = StartApp();
+
+        var mainForm = host.Services.GetRequiredService<LoginFrm>();
+        Application.Run(mainForm);
+    }
+
+    static IHost StartApp()
+    {
+        string _connectionString = string.Empty;
+        IHost host = Host
+            .CreateDefaultBuilder()
+            .ConfigureAppConfiguration((context, config) =>
+                    {
+                        config
+                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                        .AddEnvironmentVariables();
+                    })
             .ConfigureServices((context, services) =>
-            {
-                var dbPath = Path.Combine(AppContext.BaseDirectory, "shopkeeper.db");
-                string? connectionString = $"Data Source={dbPath}";
-                services.AddDbContextPool<ShopKeeperDbContext>(options => options.UseSqlite(connectionString));
-                services.AddScoped<IShopKeeperDbContext>(sp => sp.GetRequiredService<ShopKeeperDbContext>());
+                    {
+                        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                        var company = "Monty";
+                        var product = "ShopKeeperMS";
+                        var dataFolder = Path.Combine(localAppData, company, product);
 
-                services.AddScoped<IApplicationUserServices, ApplicationUserServices>();
-                services.AddScoped<IStockServices, StockServices>();
-                services.AddScoped<IStorageServices, StorageServices>();
+                        // ensure folder exists
+                        Directory.CreateDirectory(dataFolder);
 
-                services.AddTransient<LoginFrm>();
-                services.AddTransient<MainFrm>();
-                services.AddTransient<AddProductFrm>();
-                services.AddTransient<ProductListCtls>();
-                services.AddTransient<StoragePlacesListCtls>();
-                services.AddTransient<StockProductFrm>();
-                services.AddTransient<CreateStorageFrm>();
-                services.AddTransient<SalesHistoryCtls>();
-                services.AddTransient<SalesCtls>();
-                services.AddTransient<RegisterFrm>();
-                services.AddTransient<SystemUsersListCtls>();
-                services.AddTransient<ImportProductsFrm>();
-            })
+                        var dbPath = Path.Combine(dataFolder, "shopkeeper.db");
+                        _connectionString = $"Data Source={dbPath};Cache=Shared";
+
+                        var legacyDb = Path.Combine(AppContext.BaseDirectory, "shopkeeper.db");
+                        if (File.Exists(legacyDb) && !File.Exists(dbPath))
+                            File.Copy(legacyDb, dbPath);
+
+                        services.AddDbContextPool<ShopKeeperDbContext>(options => options.UseSqlite(_connectionString));
+                        services.AddScoped<IShopKeeperDbContext>(sp => sp.GetRequiredService<ShopKeeperDbContext>());
+
+                        services.AddScoped<IApplicationUserServices, ApplicationUserServices>();
+                        services.AddScoped<IStockServices, StockServices>();
+                        services.AddScoped<IStorageServices, StorageServices>();
+
+                        services.AddTransient<LoginFrm>();
+                        services.AddTransient<MainFrm>();
+                        services.AddTransient<AddProductFrm>();
+                        services.AddTransient<ProductListCtls>();
+                        services.AddTransient<StoragePlacesListCtls>();
+                        services.AddTransient<StockProductFrm>();
+                        services.AddTransient<CreateStorageFrm>();
+                        services.AddTransient<SalesHistoryCtls>();
+                        services.AddTransient<SalesCtls>();
+                        services.AddTransient<RegisterFrm>();
+                        services.AddTransient<SystemUsersListCtls>();
+                        services.AddTransient<ImportProductsFrm>();
+                    })
             .Build();
 
         // apply migrations at startup
@@ -55,9 +78,21 @@ internal static class Program
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<ShopKeeperDbContext>();
             dbContext.Database.Migrate();
+
+            EnableWAL(_connectionString);
         }
 
-        var mainForm = host.Services.GetRequiredService<LoginFrm>();
-        Application.Run(mainForm);
+        return host;
+    }
+
+    // enable WAL for better concurrency
+    static void EnableWAL(string connectionString)
+    {
+        using var conn = new Microsoft.Data.Sqlite.SqliteConnection(connectionString);
+        conn.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = "PRAGMA journal_mode = WAL;";
+        cmd.ExecuteNonQuery();
+        conn.Close();
     }
 }

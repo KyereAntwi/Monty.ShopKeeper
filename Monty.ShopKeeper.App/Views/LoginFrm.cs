@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Monty.ShopKeeper.App.Entities.Enums;
 using Monty.ShopKeeper.App.Services;
 
 namespace Monty.ShopKeeper.App.Views
@@ -66,7 +67,7 @@ namespace Monty.ShopKeeper.App.Views
                 return;
             }
 
-            var result = _applicationUserServices.AddUserAccountAsync(UserNameTxt.Text, PasswordTxt.Text).GetAwaiter().GetResult();
+            var result = _applicationUserServices.AddUserAccountAsync(UserNameTxt.Text, PasswordTxt.Text, RoleType.Administrator).GetAwaiter().GetResult();
             
             if (result.IsSuccess)
             { 

@@ -40,4 +40,5 @@ public class ShopKeeperDbContext : DbContext, IShopKeeperDbContext
     public DbSet<StoragePlace> StoragePlaces => Set<StoragePlace>();
     public DbSet<ProductStoragePlace> ProductStoragePlaces => Set<ProductStoragePlace>();
     public DbSet<Basket> Baskets => Set<Basket>();
+    public DbSet<LoggedInUser> LoggedInUser => Set<LoggedInUser>();
 }
