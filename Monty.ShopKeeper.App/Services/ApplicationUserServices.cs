@@ -98,7 +98,7 @@ public class ApplicationUserServices(IShopKeeperDbContext dbContext) : IApplicat
         return Result.Ok();
     }
 
-    public async Task<Result> UpdatePasswordAsync(string username, string newPassword, CancellationToken cancellationToken = default)
+    public async Task<Result> UpdatePasswordAsync(string username, string currentPassword, string newPassword, CancellationToken cancellationToken = default)
     {
         var existingUser = await dbContext
             .ApplicationUsers
@@ -108,6 +108,11 @@ public class ApplicationUserServices(IShopKeeperDbContext dbContext) : IApplicat
 
         if (existingUser is null)
             return Result.Fail("User not found");
+
+        var isPasswordValid = BCrypt.Net.BCrypt.Verify(currentPassword, existingUser.PasswordHash);
+
+        if (!isPasswordValid)
+            return Result.Fail("Current password is incorrect");
 
         var newHashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
 

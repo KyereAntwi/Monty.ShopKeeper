@@ -70,6 +70,7 @@ internal static class Program
                         services.AddTransient<RegisterFrm>();
                         services.AddTransient<SystemUsersListCtls>();
                         services.AddTransient<ImportProductsFrm>();
+                        services.AddTransient<PasswordResetFrm>();
                     })
             .Build();
 

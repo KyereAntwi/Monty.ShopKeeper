@@ -54,6 +54,7 @@
             exportAllSalesToolStripMenuItem = new ToolStripMenuItem();
             exportYourOverviewSummaryToolStripMenuItem = new ToolStripMenuItem();
             MainPanel = new Panel();
+            resetPasswordToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -103,7 +104,7 @@
             // 
             // systemAdministrationToolStripMenuItem
             // 
-            systemAdministrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registerSystemUserToolStripMenuItem, viewAllSystemUsersToolStripMenuItem });
+            systemAdministrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registerSystemUserToolStripMenuItem, resetPasswordToolStripMenuItem, viewAllSystemUsersToolStripMenuItem });
             systemAdministrationToolStripMenuItem.Name = "systemAdministrationToolStripMenuItem";
             systemAdministrationToolStripMenuItem.Size = new Size(345, 26);
             systemAdministrationToolStripMenuItem.Text = "System Administration";
@@ -249,6 +250,13 @@
             MainPanel.Size = new Size(1291, 797);
             MainPanel.TabIndex = 1;
             // 
+            // resetPasswordToolStripMenuItem
+            // 
+            resetPasswordToolStripMenuItem.Name = "resetPasswordToolStripMenuItem";
+            resetPasswordToolStripMenuItem.Size = new Size(235, 26);
+            resetPasswordToolStripMenuItem.Text = "Reset Password";
+            resetPasswordToolStripMenuItem.Click += resetPasswordToolStripMenuItem_Click;
+            // 
             // MainFrm
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
@@ -300,5 +308,6 @@
         private ToolStripMenuItem exportAllProductsToolStripMenuItem;
         private ToolStripMenuItem exportAllSalesToolStripMenuItem;
         private ToolStripMenuItem exportYourOverviewSummaryToolStripMenuItem;
+        private ToolStripMenuItem resetPasswordToolStripMenuItem;
     }
 }

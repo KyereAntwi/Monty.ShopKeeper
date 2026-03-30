@@ -361,4 +361,10 @@ public partial class MainFrm : Form
             importsAndExportsToolStripMenuItem.Enabled = false;
         }
     }
+
+    private void resetPasswordToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        var resetPasswordForm = _serviceProvider.GetRequiredService<PasswordResetFrm>();
+        resetPasswordForm.ShowDialog();
+    }
 }
